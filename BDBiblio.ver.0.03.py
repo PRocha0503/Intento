@@ -689,13 +689,36 @@ def menu():
   boton_registro_usuario = tkinter.Button(ventana2, text = "Registro de usuarios", command=registro).place(x = 50, y =90 )
   boton_prestamo = tkinter.Button(ventana2, text = "Préstamo", command=prestamo).place(x = 50, y = 130 )
   boton_registro_libro = tkinter.Button(ventana2, text = "Registro de libros", command=libros).place(x = 50, y = 170 )
-  boton_edicion_datos = tkinter.Button(ventana2, text = "Edicion de datos",command =edicionDatos).place(x = 50, y = 210 )
+  boton_edicion_datos = tkinter.Button(ventana2, text = "Edicion de datos",command = lambda: edicion_datos(ventana2)).place(x = 50, y = 210 )
   boton_busqueda = tkinter.Button(ventana2, text = "Busqueda", command=busqueda).place(x = 50, y = 250 )
 
   #boton_salir2 = tkinter.Button(ventana2, text = "Salir", command= ventana2.destroy).place(x = 250, y = 250 )
   
   boton_salir2 = tkinter.Button(ventana2, text = "Salir", command= salir).place(x = 250, y = 250 )
+    
+    
+def edicion_datos(ven_para_cerrar):
+    """
+    Funcion diseñada para el boton de edición de datos, habra 3 botones para selecionar dependiendo de como se quieran edicar los datos
+    Entrada: La ventana que se desea cerrar depues de abrir la ventana
+    Salida: Ninguna
+    """
+    def regresar():
+        """
+        Metodo para regresar a la ventana anterior
+        """
+        ven_para_cerrar.deiconify()
+        ventana_edicion_datos.destroy()
 
+    ventana_edicion_datos = tkinter.Toplevel()
+    ventana_edicion_datos.geometry("600x650")
+    ven_para_cerrar.withdraw()
+    texto = tkinter.Label(ventana_edicion_datos, text = "Edición de Datos", font = ("Arial", 30)).place( x = 150, y = 50)
+    boton_sinnombre1 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 1",).place(x = 240, y = 125 )
+    boton_sinnombre2 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 2",).place(x = 240, y = 175 )
+    boton_sinnombre3 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 3",).place(x = 240, y = 225 )
+    boton_regresar = tkinter.Button(ventana_edicion_datos, text = "Regresar",command = regresar ).place(x = 450, y = 500 )
+    
 def consulta():
     
   ventana3=tkinter.Tk()
