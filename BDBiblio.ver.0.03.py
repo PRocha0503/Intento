@@ -656,13 +656,15 @@ def main_account_screen():
     
     global main_screen
     main_screen = Tk()  # create a GUI window
-    main_screen.geometry("300x250") # set the configuration of GUI window 
+    main_screen.geometry("600x650") # set the configuration of GUI window 
     main_screen.title("Account Login")  # set the title of GUI window
-    Label(text="Base de Datos", bg="blue", width="300", height="2", font=("Calibri", 13)).pack() # create a Form label
-    Label(text="").pack()
-    Label(text="").pack()
-    Button(text="Ingresar", height="2", width="30", command = login).pack() # create Login Button
-    Label(text="").pack()
+     # create a Form label
+    bg = PhotoImage(file = "fondo.png") 
+    label1 = Label( main_screen, image = bg) 
+    label1.place(x = 0, y = 0) 
+    frame1 = Frame(main_screen) 
+    Label(text="Base de Datos", width="30", height="2", font=("Calibri", 16),bg = "white").place(x=100,y=200)
+    Button(text="Ingresar", height="2", width="30", command = login,bg="white").place(x = 175, y = 300) # create Login Button
     #Button(text="Register", height="2", width="30", command=register).pack() # create a register button
 
     main_screen.mainloop() # start the GUI
