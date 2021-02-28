@@ -689,7 +689,7 @@ def menu():
   boton_registro_usuario = tkinter.Button(ventana2, text = "Registro de usuarios", command=registro).place(x = 50, y =90 )
   boton_prestamo = tkinter.Button(ventana2, text = "Préstamo", command=prestamo).place(x = 50, y = 130 )
   boton_registro_libro = tkinter.Button(ventana2, text = "Registro de libros", command=libros).place(x = 50, y = 170 )
-  boton_edicion_datos = tkinter.Button(ventana2, text = "Edicion de datos").place(x = 50, y = 210 )
+  boton_edicion_datos = tkinter.Button(ventana2, text = "Edicion de datos",command =edicionDatos).place(x = 50, y = 210 )
   boton_busqueda = tkinter.Button(ventana2, text = "Busqueda", command=busqueda).place(x = 50, y = 250 )
 
   #boton_salir2 = tkinter.Button(ventana2, text = "Salir", command= ventana2.destroy).place(x = 250, y = 250 )
@@ -1331,6 +1331,73 @@ def prestamo():
     textBox_estado = tkinter.Entry(ventana6)
     textBox_estado.pack(side=tkinter.TOP)
 
+def edicionDatos():
+    def ventanaEliminar():
+        #def eliminarRegistro():
+            #Aqui se va a escribir el método que elimina el registro, después de ser buscado y apretado el botón
+
+
+        #creación de la ventana
+        ventana9=tkinter.Tk()
+        ventana9.geometry( "600x500+100+50")
+        texto8 = tkinter.Label(ventana9, text = "Eliminar dato", font = ("Arial", 30)).place( x = 270, y = 400)
+        boton_menu7 = tkinter.Button(ventana9, text = "Regresar", command=ventana9.destroy).place(x = 330, y = 300)
+        #barra de búsqueda
+        def selDes(event):
+            def vModo():
+            
+                ventanaModoTrans = OptionMenu(ventana9, varModo, *opciones2)
+                ventanaModoTrans.config(width=20)
+                ventanaModoTrans.place(x = 350, y = 120)
+                
+            if varDes.get() == 'Base Completa':
+                opciones2 = ['Usuario','Prestamo', 'Libro']
+                varModo.set('Seleccionar rubro')
+                tipoBus.set("BC")
+                vModo()
+                
+            elif varDes.get() == 'Usuario':
+                opciones2 = ['Id', 'Nombre','Apellido Paterno','Apellido Materno','Edad']
+                varModo.set('Seleccionar rubro')
+                tipoBus.set("UsuariosBD")
+                vModo()
+                
+            elif varDes.get() == 'Prestamo':
+                opciones2 = ['Fecha Inicial', 'Fecha Final','Libros','Estado']
+                varModo.set('Seleccionar rubro')
+                tipoBus.set("prestamos_table")
+                vModo()
+                
+            elif varDes.get() == 'Libro':
+                opciones2 = ['Autor', 'Título','Clave','Colección', '# ejemplar', 'Volumen', '# Adquisición', '# Tarjeta', 'ISBN', 'Clasificación']
+                varModo.set('Seleccionar rubro')
+                tipoBus.set("libros_table")
+                vModo()
+
+        bsq = StringVar()
+        tipoBus = StringVar()
+        tipoTab = StringVar()
+        textBox_buscar = tkinter.Entry(ventana9, textvariable = bsq)
+        textBox_buscar.place(x = 230 , y = 200)
+        varDes = StringVar(ventana9)
+        varDes.set('Seleccionar tabla')
+        varModo = StringVar(ventana9)
+        varModo.set('Seleccionar rubro')
+        opciones = ['Base Completa', 'Usuario','Prestamo', 'Libro']
+        ventanaDeslizante = OptionMenu(ventana9, varDes, *opciones, command=selDes)
+        ventanaDeslizante.config(width=20)
+        ventanaDeslizante.place(x = 80, y = 120)
+        boton_buscar = tkinter.Button(ventana9, text = "Eliminar").place(x = 400, y = 200)
+
+    #creación de la ventana
+    ventana8=tkinter.Tk()
+    ventana8.geometry( "600x500+100+50")
+    texto7 = tkinter.Label(ventana8, text = "Edición", font = ("Arial", 30)).place( x = 270, y = 400)
+    boton_menu6 = tkinter.Button(ventana8, text = "Menú", command=ventana8.destroy).place(x = 330, y = 300)
+    
+    #Botones para editar y borrar, cada uno despliega un menu
+    boton_editar = tkinter.Button(ventana8, text = "Editar").place(x = 50, y =90 )
+    boton_eliminar = tkinter.Button(ventana8, text = "Eliminar",command=ventanaEliminar).place(x = 50, y = 130 )
 
     
 def busqueda():
