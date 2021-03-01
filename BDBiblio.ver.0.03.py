@@ -167,10 +167,10 @@ def login_data(user_login, code_login, conn):
         
         else:
         
-            #print(log_data)
-            #print(len(log_data))
-            #print(type(log_data))
-            #print(log_data[0][0])
+            print(log_data)
+            print(len(log_data))
+            print(type(log_data))
+            print(log_data[0][0])
         
             
             
@@ -188,7 +188,7 @@ def login_data(user_login, code_login, conn):
     except Error as e:
         print(e)
 
-def mostrarUsuario(root, sqlS):
+def mostrarUsuario(root, sqlS,editar):
     try:
         
         tree = ttk.Treeview(root, column=("c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "c11"), show='headings')
@@ -259,9 +259,13 @@ def mostrarUsuario(root, sqlS):
         
         
     except Error as e:
-            print(e)    
+        print(e)
 
-def mostrarPrestamo(root, sqlP):
+    if editar:
+        eliminar= tkinter.Button(root,text='Eliminar',command= lambda: on_delete_selected_button_clicked(tree,"UsuariosBD")).pack(side=LEFT)
+        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"UsuariosBD")).pack(side=LEFT) 
+
+def mostrarPrestamo(root, sqlP,editar):
     try:
         
         tree = ttk.Treeview(root, column=("c1", "c2", "c3", "c4", "c5"), show='headings')
@@ -316,9 +320,11 @@ def mostrarPrestamo(root, sqlP):
     
     
     salir = tkinter.Button(root, text = "Cerrar", command= root.destroy).pack(side=RIGHT)
+    if editar:
+        eliminar= tkinter.Button(root,text='Eliminar', command= lambda: on_delete_selected_button_clicked(tree,"prestamos_table")).pack(side=LEFT)
+        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"prestamos_table")).pack(side=LEFT)
 
-
-def mostrarLibro(root, sqlL):
+def mostrarLibro(root, sqlL, editar):
     try:
         
         tree = ttk.Treeview(root, column=("c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "c11", "c12"), show='headings')
@@ -395,7 +401,9 @@ def mostrarLibro(root, sqlL):
     
     
     salir = tkinter.Button(root, text = "Cerrar", command= root.destroy).pack(side=RIGHT)
-
+    if editar:
+        eliminar= tkinter.Button(root,text='Eliminar', command= lambda: on_delete_selected_button_clicked(tree,"libros_table")).pack(side=LEFT)
+        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"libros_table")).pack(side=LEFT)
 
 def main():
     
@@ -1377,74 +1385,49 @@ def prestamo(ven_para_cerrar):
     textBox_libros.pack(side=tkinter.TOP)
     textBox_estado = tkinter.Entry(ventana6)
     textBox_estado.pack(side=tkinter.TOP)
+
+def on_delete_selected_button_clicked(tree,tabla):
+    try:
+        tree.item(tree.selection())['values'][0]
+    except IndexError as e:
+        messagebox.showinfo(message="Selecciona al menos un objeto")
+        return
+    #delete_items(tree,tabla)
+
+def on_modify_selected_button_clicked(tree,tabla):
+    try:
+        tree.item(tree.selection())['values'][0]
+    except IndexError as e:
+        messagebox.showinfo(message="Selecciona al menos un objeto")
+        return
+    #modify_items(tree,tabla)
+
+def delete_items(tree,tabla):
+    #FALTA HACER QUE ESTE METODO SIRVA BIEN
+    #print(tree)
+    #print(tabla)
+    name = tree.item(tree.selection())['text']
+    print(name)
+    #query = f"DELETE * FROM {tabla} WHERE TipeBarang = ?;"
+    query = 'DELETE FROM ' +tabla+' WHERE name = ?'
+    #query = 'DELETE FROM UsuariosBD'
+    execute_db_query(query, (name,))
+    messagebox.showinfo("Eliminado con éxito") 
+
+#def modify_items(tree,tabla):
+    #FALTA HACER ESTE METODO
+
+
+def execute_db_query(query, parameters=()):
+    print(conn)
+    print('You have successfully connected to the DatabaseT')
+    cursor = conn.cursor()
+    query_result = cursor.execute(query, parameters)
+    conn.commit()
+    return query_result
 def edicionDatos():
-    def ventanaEliminar():
-        #def eliminarRegistro():
-            #Aqui se va a escribir el método que elimina el registro, después de ser buscado y apretado el botón
-
-
-        #creación de la ventana
-        ventana9=tkinter.Tk()
-        ventana9.geometry( "600x500+100+50")
-        texto8 = tkinter.Label(ventana9, text = "Eliminar dato", font = ("Arial", 30)).place( x = 270, y = 400)
-        boton_menu7 = tkinter.Button(ventana9, text = "Regresar", command=ventana9.destroy).place(x = 330, y = 300)
-        #barra de búsqueda
-        def selDes(event):
-            def vModo():
-            
-                ventanaModoTrans = OptionMenu(ventana9, varModo, *opciones2)
-                ventanaModoTrans.config(width=20)
-                ventanaModoTrans.place(x = 350, y = 120)
-                
-            if varDes.get() == 'Base Completa':
-                opciones2 = ['Usuario','Prestamo', 'Libro']
-                varModo.set('Seleccionar rubro')
-                tipoBus.set("BC")
-                vModo()
-                
-            elif varDes.get() == 'Usuario':
-                opciones2 = ['Id', 'Nombre','Apellido Paterno','Apellido Materno','Edad']
-                varModo.set('Seleccionar rubro')
-                tipoBus.set("UsuariosBD")
-                vModo()
-                
-            elif varDes.get() == 'Prestamo':
-                opciones2 = ['Fecha Inicial', 'Fecha Final','Libros','Estado']
-                varModo.set('Seleccionar rubro')
-                tipoBus.set("prestamos_table")
-                vModo()
-                
-            elif varDes.get() == 'Libro':
-                opciones2 = ['Autor', 'Título','Clave','Colección', '# ejemplar', 'Volumen', '# Adquisición', '# Tarjeta', 'ISBN', 'Clasificación']
-                varModo.set('Seleccionar rubro')
-                tipoBus.set("libros_table")
-                vModo()
-
-        bsq = StringVar()
-        tipoBus = StringVar()
-        tipoTab = StringVar()
-        textBox_buscar = tkinter.Entry(ventana9, textvariable = bsq)
-        textBox_buscar.place(x = 230 , y = 200)
-        varDes = StringVar(ventana9)
-        varDes.set('Seleccionar tabla')
-        varModo = StringVar(ventana9)
-        varModo.set('Seleccionar rubro')
-        opciones = ['Base Completa', 'Usuario','Prestamo', 'Libro']
-        ventanaDeslizante = OptionMenu(ventana9, varDes, *opciones, command=selDes)
-        ventanaDeslizante.config(width=20)
-        ventanaDeslizante.place(x = 80, y = 120)
-        boton_buscar = tkinter.Button(ventana9, text = "Eliminar").place(x = 400, y = 200)
-
-    #creación de la ventana
-    ventana8=tkinter.Tk()
-    ventana8.geometry( "600x500+100+50")
-    texto7 = tkinter.Label(ventana8, text = "Edición", font = ("Arial", 30)).place( x = 270, y = 400)
-    boton_menu6 = tkinter.Button(ventana8, text = "Menú", command=ventana8.destroy).place(x = 330, y = 300)
-    
-    #Botones para editar y borrar, cada uno despliega un menu
-    boton_editar = tkinter.Button(ventana8, text = "Editar").place(x = 50, y =90 )
-    boton_eliminar = tkinter.Button(ventana8, text = "Eliminar",command=ventanaEliminar).place(x = 50, y = 130 )
-def busqueda(ven_para_cerrar):
+    busqueda(True)
+def busqueda(ven_para_cerrar,*editar):
     ven_para_cerrar.withdraw()
     def buscarBD():
       
@@ -1526,22 +1509,22 @@ def busqueda(ven_para_cerrar):
       
       if tipoBus.get() == "BC":
           if tipoTab.get() == "Usuario":
-              mostrarUsuario(tabla_busqueda, statement)
+              mostrarUsuario(tabla_busqueda, statement,editar)
           elif tipoTab.get() == "Prestamo":
-              mostrarPrestamo(tabla_busqueda, statement)
+              mostrarPrestamo(tabla_busqueda, statement,editar)
           elif tipoTab.get() == "Libro":
-              mostrarLibro(tabla_busqueda, statement)
+              mostrarLibro(tabla_busqueda, statement,editar)
               
       elif tipoBus.get() == "UsuariosBD":
-          mostrarUsuario(tabla_busqueda, statement)
+          mostrarUsuario(tabla_busqueda, statement,editar)
           print("gotr")
       elif tipoBus.get() == "prestamos_table":
-          mostrarPrestamo(tabla_busqueda, statement)        
+          mostrarPrestamo(tabla_busqueda, statement,editar)        
       elif tipoBus.get() == "libros_table":
-          mostrarLibro(tabla_busqueda, statement)
+          mostrarLibro(tabla_busqueda, statement,editar)
       
       
-      #mostrarUsuario(tabla_busqueda, statement) #HACER OTRA FUNCION PARA MOSTRAR TODAS LAS TABLAS
+      #mostrarUsuario(tabla_busqueda, statement,editar) #HACER OTRA FUNCION PARA MOSTRAR TODAS LAS TABLAS
       
       
       
@@ -1559,9 +1542,12 @@ def busqueda(ven_para_cerrar):
 
     ventana7=tkinter.Tk()
     ventana7.geometry( "600x500+100+50")
-    texto6 = tkinter.Label(ventana7, text = "Búsqueda", font = ("Arial", 30)).place( x = 270, y = 400)
-    boton_menu5 = tkinter.Button(ventana7, text = "Regresar", command=regresar).place(x = 330, y = 300)
-    
+
+    if not editar:
+        texto6 = tkinter.Label(ventana7, text = "Búsqueda", font = ("Arial", 30)).place( x = 270, y = 400)
+    else:
+        texto6 = tkinter.Label(ventana7, text = "Edición", font = ("Arial", 30)).place( x = 270, y = 400)
+    boton_menu5 = tkinter.Button(ventana7, text = "Regresar", command=regresar).place(x = 330, y = 300)  
     
     
     bsq = StringVar()
