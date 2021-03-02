@@ -407,7 +407,7 @@ def mostrarLibro(root, sqlL, editar):
 
 def main():
     
-    database = r"/home/pablorocha/projects/Python/sqlite/db/pruebabd.db" # CONNECTION IS CREATED, ADRESS FOR LOCAL FILE
+    database = r"C:\sqlite\db\pruebabd.db" # CONNECTION IS CREATED, ADRESS FOR LOCAL FILE
     
     
     #Tabla de usuarios
@@ -699,40 +699,13 @@ def menu():
   boton_registro_usuario = tkinter.Button(ventana2, text = "Registro de usuarios", command=lambda:registro(ventana2)).place(x = 50, y =90 )
   boton_prestamo = tkinter.Button(ventana2, text = "Préstamo", command=lambda:prestamo(ventana2)).place(x = 50, y = 130 )
   boton_registro_libro = tkinter.Button(ventana2, text = "Registro de libros", command=lambda: libros(ventana2)).place(x = 50, y = 170 )
-  boton_edicion_datos = tkinter.Button(ventana2, text = "Edicion de datos",command = lambda: edicion_datos(ventana2)).place(x = 50, y = 210 )
+  boton_edicion_datos = tkinter.Button(ventana2, text = "Edicion de datos",command = lambda:edicionDatos(ventana2)).place(x = 50, y = 210 )
   boton_busqueda = tkinter.Button(ventana2, text = "Busqueda", command=lambda:busqueda(ventana2)).place(x = 50, y = 250 )
 
   #boton_salir2 = tkinter.Button(ventana2, text = "Salir", command= ventana2.destroy).place(x = 250, y = 250 )
   
   boton_salir2 = tkinter.Button(ventana2, text = "Salir", command= salir).place(x = 250, y = 250 )
 
-
-def edicion_datos(ven_para_cerrar):
-    """
-    Funcion diseñada para el boton de edición de datos, habra 3 botones para selecionar dependiendo de como se quieran edicar los datos
-    Entrada: La ventana que se desea cerrar depues de abrir la ventana
-    Salida: Ninguna
-    """
-    def regresar():
-        """
-        Metodo para regresar a la ventana anterior
-        """
-        ven_para_cerrar.deiconify()
-        ventana_edicion_datos.destroy()
-
-    ventana_edicion_datos = tkinter.Toplevel()
-    ventana_edicion_datos.geometry("600x650")
-    ven_para_cerrar.withdraw()
-    texto = tkinter.Label(ventana_edicion_datos, text = "Edición de Datos", font = ("Arial", 30)).place( x = 150, y = 50)
-    boton_sinnombre1 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 1",).place(x = 240, y = 125 )
-    boton_sinnombre2 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 2",).place(x = 240, y = 175 )
-    boton_sinnombre3 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 3",).place(x = 240, y = 225 )
-    boton_regresar = tkinter.Button(ventana_edicion_datos, text = "Regresar",command = regresar ).place(x = 450, y = 500 )
-    """bg = PhotoImage(file = "fondo.png") 
-    label = Label(ventana_edicion_datos, image = bg) 
-    label.place(x = 0, y = 0) 
-    label.draw
-    frame = Frame(ventana_edicion_datos)"""
 
 def consulta(ven_para_cerrar):
     
@@ -1400,7 +1373,35 @@ def on_modify_selected_button_clicked(tree,tabla):
     except IndexError as e:
         messagebox.showinfo(message="Selecciona al menos un objeto")
         return
-    #modify_items(tree,tabla)
+    #modify_items(ven_para_cerrar,tree,tabla)
+
+def modify_items(ven_para_cerrar,tree,tabla):
+    #FALTA TERMINAR ESTE METODO
+    """
+    Funcion diseñada para el boton de edición de datos, habra 3 botones para selecionar dependiendo de como se quieran edicar los datos
+    Entrada: La ventana que se desea cerrar depues de abrir la ventana
+    Salida: Ninguna
+    """
+    def regresar():
+        """
+        Metodo para regresar a la ventana anterior
+        """
+        ven_para_cerrar.deiconify()
+        ventana_edicion_datos.destroy()
+
+    ventana_edicion_datos = tkinter.Toplevel()
+    ventana_edicion_datos.geometry("600x650")
+    ven_para_cerrar.withdraw()
+    texto = tkinter.Label(ventana_edicion_datos, text = "Edición de Datos", font = ("Arial", 30)).place( x = 150, y = 50)
+    boton_sinnombre1 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 1",).place(x = 240, y = 125 )
+    boton_sinnombre2 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 2",).place(x = 240, y = 175 )
+    boton_sinnombre3 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 3",).place(x = 240, y = 225 )
+    boton_regresar = tkinter.Button(ventana_edicion_datos, text = "Regresar",command = regresar ).place(x = 450, y = 500 )
+    """bg = PhotoImage(file = "fondo.png") 
+    label = Label(ventana_edicion_datos, image = bg) 
+    label.place(x = 0, y = 0) 
+    label.draw
+    frame = Frame(ventana_edicion_datos)"""
 
 def delete_items(tree,tabla):
     #FALTA HACER QUE ESTE METODO SIRVA BIEN
@@ -1414,10 +1415,6 @@ def delete_items(tree,tabla):
     execute_db_query(query, (name,))
     messagebox.showinfo("Eliminado con éxito") 
 
-#def modify_items(tree,tabla):
-    #FALTA HACER ESTE METODO
-
-
 def execute_db_query(query, parameters=()):
     print(conn)
     print('You have successfully connected to the DatabaseT')
@@ -1425,8 +1422,11 @@ def execute_db_query(query, parameters=()):
     query_result = cursor.execute(query, parameters)
     conn.commit()
     return query_result
-def edicionDatos():
-    busqueda(True)
+
+def edicionDatos(ven_para_cerrar):
+    busqueda(ven_para_cerrar,True)
+
+
 def busqueda(ven_para_cerrar,*editar):
     ven_para_cerrar.withdraw()
     def buscarBD():
