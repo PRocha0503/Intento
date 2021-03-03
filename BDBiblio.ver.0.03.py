@@ -262,8 +262,8 @@ def mostrarUsuario(root, sqlS,editar):
         print(e)
 
     if editar:
-        eliminar= tkinter.Button(root,text='Eliminar',command= lambda: on_delete_selected_button_clicked(tree,"UsuariosBD")).pack(side=LEFT)
-        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"UsuariosBD")).pack(side=LEFT) 
+        eliminar= tkinter.Button(root,text='Eliminar',command= lambda: on_delete_selected_button_clicked(tree,"UsuariosBD",root)).pack(side=LEFT)
+        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"UsuariosBD",root)).pack(side=LEFT) 
 
 def mostrarPrestamo(root, sqlP,editar):
     try:
@@ -321,8 +321,8 @@ def mostrarPrestamo(root, sqlP,editar):
     
     salir = tkinter.Button(root, text = "Cerrar", command= root.destroy).pack(side=RIGHT)
     if editar:
-        eliminar= tkinter.Button(root,text='Eliminar', command= lambda: on_delete_selected_button_clicked(tree,"prestamos_table")).pack(side=LEFT)
-        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"prestamos_table")).pack(side=LEFT)
+        eliminar= tkinter.Button(root,text='Eliminar', command= lambda: on_delete_selected_button_clicked(tree,"prestamos_table",root)).pack(side=LEFT)
+        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"prestamos_table",root)).pack(side=LEFT)
 
 def mostrarLibro(root, sqlL, editar):
     try:
@@ -402,8 +402,8 @@ def mostrarLibro(root, sqlL, editar):
     
     salir = tkinter.Button(root, text = "Cerrar", command= root.destroy).pack(side=RIGHT)
     if editar:
-        eliminar= tkinter.Button(root,text='Eliminar', command= lambda: on_delete_selected_button_clicked(tree,"libros_table")).pack(side=LEFT)
-        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"libros_table")).pack(side=LEFT)
+        eliminar= tkinter.Button(root,text='Eliminar', command= lambda: on_delete_selected_button_clicked(tree,"libros_table",root)).pack(side=LEFT)
+        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"libros_table",root)).pack(side=LEFT)
 
 def main():
     
@@ -411,7 +411,6 @@ def main():
     
     
     #Tabla de usuarios
-
     users_table = """ CREATE TABLE IF NOT EXISTS UsuariosBD (
                                         id_U integer PRIMARY KEY,
                                         Nombre text NOT NULL,
@@ -549,10 +548,17 @@ def login():
     
     global login_screen
     login_screen = Toplevel(main_screen)
+    main_screen.withdraw()
     login_screen.title("Login")
-    login_screen.geometry("300x250")
-    Label(login_screen, text="Ingrese su información para acceder").pack()
-    Label(login_screen, text="").pack()
+    login_screen.geometry("600x650")
+    label1 = Label( login_screen, image = bg) 
+    label1.place(x = 0, y = 0) 
+    frame1 = Frame(login_screen) 
+    
+
+
+    
+    Label(login_screen, text="Ingrese su información para acceder",font=("Arial",20),bg="white").place(x = 75,y=170)
 
     global username_verify
     global password_verify
@@ -563,15 +569,13 @@ def login():
     global username_login_entry
     global password_login_entry
 
-    Label(login_screen, text="Usuario").pack()
+    Label(login_screen, text="Usuario",bg="white").place(x = 100,y=250)
     username_login_entry = Entry(login_screen, textvariable=username_verify)
-    username_login_entry.pack()
-    Label(login_screen, text="").pack()
-    Label(login_screen, text="Contraseña").pack()
+    username_login_entry.place(x = 100,y=270)
+    Label(login_screen, text="Contraseña",bg="white").place(x = 100,y=350)
     password_login_entry = Entry(login_screen, textvariable=password_verify, show= '*')
-    password_login_entry.pack()
-    Label(login_screen, text="").pack()
-    Button(login_screen, text="Login", width=10, height=1, command = login_verify).pack()
+    password_login_entry.place(x = 100,y=370)
+    Button(login_screen, text="Login", width=10, height=1, command = login_verify).place(x = 250,y=500)
     
 
 
@@ -613,9 +617,12 @@ def login_sucess():
     global login_success_screen
     login_success_screen = Toplevel(login_screen)
     login_success_screen.title("Success")
-    login_success_screen.geometry("150x100")
-    Label(login_success_screen, text="Login Success").pack()
-    Button(login_success_screen, text="OK", command=delete_login_success).pack()
+    login_success_screen.geometry("600x650")
+    label1 = Label(login_success_screen, image = bg) 
+    label1.place(x = 0, y = 0) 
+    frame1 = Frame(login_success_screen) 
+    Label(login_success_screen, text="Login Success",font=("Calibri", 16),bg = "white").place(x=220,y=200)
+    Button(login_success_screen, text="OK", command=delete_login_success).place(x=280,y=300)
 
 # Designing popup for login invalid password
 
@@ -661,6 +668,7 @@ def main_account_screen():
     main()
     
     global main_screen
+    global bg
     main_screen = Tk()  # create a GUI window
     main_screen.geometry("600x650") # set the configuration of GUI window 
     main_screen.title("Account Login")  # set the title of GUI window
@@ -670,7 +678,8 @@ def main_account_screen():
     label1.place(x = 0, y = 0) 
     frame1 = Frame(main_screen) 
     Label(text="Base de Datos", width="30", height="2", font=("Calibri", 16),bg = "white").place(x=100,y=200)
-    Button(text="Ingresar", height="2", width="30", command = login,bg="white").place(x = 175, y = 300) # create Login Button
+    bgingresar = PhotoImage(file = "Ingresar.png")
+    Button(text="Ingresar", height="40", width="90", command = login,bg="white",image = bgingresar,border = "0").place(x = 245, y = 300) # create Login Button
     #Button(text="Register", height="2", width="30", command=register).pack() # create a register button
 
     main_screen.mainloop() # start the GUI
@@ -688,23 +697,26 @@ def menu():
   ventana2.geometry( "600x650")
   global main_screen
   main_screen.withdraw()
+  label1 = Label(ventana2, image = bg) 
+  label1.place(x = 0, y = 0) 
+  frame1 = Frame(ventana2) 
   
   def salir():
       ventana2.destroy()
       main_screen.destroy()
       sys.exit()
 
-  texto = tkinter.Label(ventana2, text = "Menú", font = ("Arial", 30)).place( x = 300, y = 400)
-  boton_consulta = tkinter.Button(ventana2, text = "Consulta", command= lambda: consulta(ventana2)).place(x = 50, y = 50 )
-  boton_registro_usuario = tkinter.Button(ventana2, text = "Registro de usuarios", command=lambda:registro(ventana2)).place(x = 50, y =90 )
-  boton_prestamo = tkinter.Button(ventana2, text = "Préstamo", command=lambda:prestamo(ventana2)).place(x = 50, y = 130 )
-  boton_registro_libro = tkinter.Button(ventana2, text = "Registro de libros", command=lambda: libros(ventana2)).place(x = 50, y = 170 )
-  boton_edicion_datos = tkinter.Button(ventana2, text = "Edicion de datos",command = lambda:edicionDatos(ventana2)).place(x = 50, y = 210 )
-  boton_busqueda = tkinter.Button(ventana2, text = "Busqueda", command=lambda:busqueda(ventana2)).place(x = 50, y = 250 )
+  texto = tkinter.Label(ventana2, text = "Menú",font=("Calibri", 25),bg = "white").place( x = 250, y = 180)
+  boton_consulta = tkinter.Button(ventana2, text = "Consulta", command= lambda: consulta(ventana2),bg = "white").place(x = 70, y = 250 )
+  boton_registro_usuario = tkinter.Button(ventana2, text = "Registro de usuarios", command=lambda:registro(ventana2),bg = "white").place(x = 70, y =300 )
+  boton_prestamo = tkinter.Button(ventana2, text = "Préstamo", command=lambda:prestamo(ventana2),bg = "white").place(x = 70, y = 350 )
+  boton_registro_libro = tkinter.Button(ventana2, text = "Registro de libros", command=lambda: libros(ventana2),bg = "white").place(x = 70, y = 400 )
+  boton_edicion_datos = tkinter.Button(ventana2, text = "Edicion de datos",command = lambda:edicionDatos(ventana2),bg = "white").place(x = 70, y = 450 )
+  boton_busqueda = tkinter.Button(ventana2, text = "Busqueda", command=lambda:busqueda(ventana2),bg = "white").place(x = 70, y = 500)
 
   #boton_salir2 = tkinter.Button(ventana2, text = "Salir", command= ventana2.destroy).place(x = 250, y = 250 )
   
-  boton_salir2 = tkinter.Button(ventana2, text = "Salir", command= salir).place(x = 250, y = 250 )
+  boton_salir2 = tkinter.Button(ventana2, text = "Salir", command= salir,bg = "white").place(x = 290, y = 550 )
 
 
 def consulta(ven_para_cerrar):
@@ -1359,61 +1371,69 @@ def prestamo(ven_para_cerrar):
     textBox_estado = tkinter.Entry(ventana6)
     textBox_estado.pack(side=tkinter.TOP)
 
-def on_delete_selected_button_clicked(tree,tabla):
+def on_delete_selected_button_clicked(tree,tabla,root):
     try:
         tree.item(tree.selection())['values'][0]
     except IndexError as e:
-        messagebox.showinfo(message="Selecciona al menos un objeto")
+        messagebox.showinfo(message="Selecciona un objeto")
         return
-    #delete_items(tree,tabla)
+    delete_items(tree,tabla,root)
 
-def on_modify_selected_button_clicked(tree,tabla):
+def on_modify_selected_button_clicked(tree,tabla,root):
     try:
         tree.item(tree.selection())['values'][0]
     except IndexError as e:
-        messagebox.showinfo(message="Selecciona al menos un objeto")
+        messagebox.showinfo(message="Selecciona un objeto")
         return
-    #modify_items(ven_para_cerrar,tree,tabla)
+    modify_items(tree,tabla,root)
 
-def modify_items(ven_para_cerrar,tree,tabla):
+def modify_items(tree,tabla,root):
     #FALTA TERMINAR ESTE METODO
     """
     Funcion diseñada para el boton de edición de datos, habra 3 botones para selecionar dependiendo de como se quieran edicar los datos
     Entrada: La ventana que se desea cerrar depues de abrir la ventana
     Salida: Ninguna
     """
+    root.withdraw()
     def regresar():
         """
         Metodo para regresar a la ventana anterior
         """
-        ven_para_cerrar.deiconify()
         ventana_edicion_datos.destroy()
+        root.destroy()
 
-    ventana_edicion_datos = tkinter.Toplevel()
+    ventana_edicion_datos = tkinter.Tk()
     ventana_edicion_datos.geometry("600x650")
-    ven_para_cerrar.withdraw()
     texto = tkinter.Label(ventana_edicion_datos, text = "Edición de Datos", font = ("Arial", 30)).place( x = 150, y = 50)
     boton_sinnombre1 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 1",).place(x = 240, y = 125 )
     boton_sinnombre2 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 2",).place(x = 240, y = 175 )
     boton_sinnombre3 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 3",).place(x = 240, y = 225 )
-    boton_regresar = tkinter.Button(ventana_edicion_datos, text = "Regresar",command = regresar ).place(x = 450, y = 500 )
-    """bg = PhotoImage(file = "fondo.png") 
-    label = Label(ventana_edicion_datos, image = bg) 
+    boton_regresar = tkinter.Button(ventana_edicion_datos, text = "Regresar",command = regresar).place(x = 450, y = 500 )
+    label = Label(ventana_edicion_datos) 
     label.place(x = 0, y = 0) 
-    label.draw
-    frame = Frame(ventana_edicion_datos)"""
+    #label.draw
+    frame = Frame(ventana_edicion_datos)
 
-def delete_items(tree,tabla):
-    #FALTA HACER QUE ESTE METODO SIRVA BIEN
+def delete_items(tree,tabla,root):
     #print(tree)
     #print(tabla)
-    name = tree.item(tree.selection())['text']
+    name=tree.item(tree.selection())['values'][0]
     print(name)
-    #query = f"DELETE * FROM {tabla} WHERE TipeBarang = ?;"
-    query = 'DELETE FROM ' +tabla+' WHERE name = ?'
-    #query = 'DELETE FROM UsuariosBD'
-    execute_db_query(query, (name,))
-    messagebox.showinfo("Eliminado con éxito") 
+    #cur = conn.cursor()
+    if tabla=="libros_table":
+        query = 'DELETE FROM ' +tabla+' WHERE id_L = ?'
+    elif tabla=="UsuariosBD":
+        query = 'DELETE FROM ' +tabla+' WHERE id_U = ?'
+    elif tabla=="prestamos_table":
+        query = 'DELETE FROM ' +tabla+' WHERE id_P = ?'
+    print(query)
+    #cur.execute(query,(name,))
+    #conn.commit()
+    messageDelete = messagebox.askyesno("Confirmación", "¿Quieres eliminar este registro permanentemente?")
+    if messageDelete > 0:
+        execute_db_query(query, (name,))
+        messagebox.showinfo(message="Eliminado con éxito")
+        root.destroy()
 
 def execute_db_query(query, parameters=()):
     print(conn)
@@ -1422,6 +1442,7 @@ def execute_db_query(query, parameters=()):
     query_result = cursor.execute(query, parameters)
     conn.commit()
     return query_result
+
 
 def edicionDatos(ven_para_cerrar):
     busqueda(ven_para_cerrar,True)
@@ -1526,11 +1547,6 @@ def busqueda(ven_para_cerrar,*editar):
       
       #mostrarUsuario(tabla_busqueda, statement,editar) #HACER OTRA FUNCION PARA MOSTRAR TODAS LAS TABLAS
       
-      
-      
-      
-      
-      
       return
   
     def regresar():
@@ -1541,12 +1557,13 @@ def busqueda(ven_para_cerrar,*editar):
         ventana7.destroy()
 
     ventana7=tkinter.Tk()
-    ventana7.geometry( "600x500+100+50")
+    ventana7.geometry( "600x650")
 
     if not editar:
         texto6 = tkinter.Label(ventana7, text = "Búsqueda", font = ("Arial", 30)).place( x = 270, y = 400)
     else:
         texto6 = tkinter.Label(ventana7, text = "Edición", font = ("Arial", 30)).place( x = 270, y = 400)
+        
     boton_menu5 = tkinter.Button(ventana7, text = "Regresar", command=regresar).place(x = 330, y = 300)  
     
     
