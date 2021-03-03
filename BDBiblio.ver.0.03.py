@@ -549,10 +549,17 @@ def login():
     
     global login_screen
     login_screen = Toplevel(main_screen)
+    main_screen.withdraw()
     login_screen.title("Login")
-    login_screen.geometry("300x250")
-    Label(login_screen, text="Ingrese su información para acceder").pack()
-    Label(login_screen, text="").pack()
+    login_screen.geometry("600x650")
+    label1 = Label( login_screen, image = bg) 
+    label1.place(x = 0, y = 0) 
+    frame1 = Frame(login_screen) 
+    
+
+
+    
+    Label(login_screen, text="Ingrese su información para acceder",font=("Arial",20),bg="white").place(x = 75,y=170)
 
     global username_verify
     global password_verify
@@ -563,15 +570,13 @@ def login():
     global username_login_entry
     global password_login_entry
 
-    Label(login_screen, text="Usuario").pack()
+    Label(login_screen, text="Usuario",bg="white").place(x = 100,y=250)
     username_login_entry = Entry(login_screen, textvariable=username_verify)
-    username_login_entry.pack()
-    Label(login_screen, text="").pack()
-    Label(login_screen, text="Contraseña").pack()
+    username_login_entry.place(x = 100,y=270)
+    Label(login_screen, text="Contraseña",bg="white").place(x = 100,y=350)
     password_login_entry = Entry(login_screen, textvariable=password_verify, show= '*')
-    password_login_entry.pack()
-    Label(login_screen, text="").pack()
-    Button(login_screen, text="Login", width=10, height=1, command = login_verify).pack()
+    password_login_entry.place(x = 100,y=370)
+    Button(login_screen, text="Login", width=10, height=1, command = login_verify).place(x = 250,y=500)
     
 
 
@@ -661,6 +666,7 @@ def main_account_screen():
     main()
     
     global main_screen
+    global bg
     main_screen = Tk()  # create a GUI window
     main_screen.geometry("600x650") # set the configuration of GUI window 
     main_screen.title("Account Login")  # set the title of GUI window
