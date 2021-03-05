@@ -1,5 +1,4 @@
 
-
 # -*- coding: utf-8 -*-
 """
 
@@ -262,8 +261,8 @@ def mostrarUsuario(root, sqlS,editar):
         print(e)
 
     if editar:
-        eliminar= tkinter.Button(root,text='Eliminar',command= lambda: on_delete_selected_button_clicked(tree,"UsuariosBD")).pack(side=LEFT)
-        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"UsuariosBD")).pack(side=LEFT) 
+        eliminar= tkinter.Button(root,text='Eliminar',command= lambda: on_delete_selected_button_clicked(tree,"UsuariosBD",root)).pack(side=LEFT)
+        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"UsuariosBD",root)).pack(side=LEFT) 
 
 def mostrarPrestamo(root, sqlP,editar):
     try:
@@ -321,8 +320,8 @@ def mostrarPrestamo(root, sqlP,editar):
     
     salir = tkinter.Button(root, text = "Cerrar", command= root.destroy).pack(side=RIGHT)
     if editar:
-        eliminar= tkinter.Button(root,text='Eliminar', command= lambda: on_delete_selected_button_clicked(tree,"prestamos_table")).pack(side=LEFT)
-        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"prestamos_table")).pack(side=LEFT)
+        eliminar= tkinter.Button(root,text='Eliminar', command= lambda: on_delete_selected_button_clicked(tree,"prestamos_table",root)).pack(side=LEFT)
+        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"prestamos_table",root)).pack(side=LEFT)
 
 def mostrarLibro(root, sqlL, editar):
     try:
@@ -402,8 +401,8 @@ def mostrarLibro(root, sqlL, editar):
     
     salir = tkinter.Button(root, text = "Cerrar", command= root.destroy).pack(side=RIGHT)
     if editar:
-        eliminar= tkinter.Button(root,text='Eliminar', command= lambda: on_delete_selected_button_clicked(tree,"libros_table")).pack(side=LEFT)
-        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"libros_table")).pack(side=LEFT)
+        eliminar= tkinter.Button(root,text='Eliminar', command= lambda: on_delete_selected_button_clicked(tree,"libros_table",root)).pack(side=LEFT)
+        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"libros_table",root)).pack(side=LEFT)
 
 def main():
     
@@ -1371,60 +1370,69 @@ def prestamo(ven_para_cerrar):
     textBox_estado = tkinter.Entry(ventana6)
     textBox_estado.pack(side=tkinter.TOP)
 
-def on_delete_selected_button_clicked(tree,tabla):
+def on_delete_selected_button_clicked(tree,tabla,root):
     try:
         tree.item(tree.selection())['values'][0]
     except IndexError as e:
-        messagebox.showinfo(message="Selecciona al menos un objeto")
+        messagebox.showinfo(message="Selecciona un objeto")
         return
-    #delete_items(tree,tabla)
+    delete_items(tree,tabla,root)
 
-def on_modify_selected_button_clicked(tree,tabla):
+def on_modify_selected_button_clicked(tree,tabla,root):
     try:
         tree.item(tree.selection())['values'][0]
     except IndexError as e:
-        messagebox.showinfo(message="Selecciona al menos un objeto")
+        messagebox.showinfo(message="Selecciona un objeto")
         return
-    modify_items(tree,tabla)
+    modify_items(tree,tabla,root)
 
-def modify_items(tree,tabla):
+def modify_items(tree,tabla,root):
     #FALTA TERMINAR ESTE METODO
     """
     Funcion diseñada para el boton de edición de datos, habra 3 botones para selecionar dependiendo de como se quieran edicar los datos
     Entrada: La ventana que se desea cerrar depues de abrir la ventana
     Salida: Ninguna
     """
-    # def regresar():
-    #     """
-    #     Metodo para regresar a la ventana anterior
-    #     """
-    #     ven_para_cerrar.deiconify()
-    #     ventana_edicion_datos.destroy()
+    root.withdraw()
+    def regresar():
+        """
+        Metodo para regresar a la ventana anterior
+        """
+        ventana_edicion_datos.destroy()
+        root.destroy()
 
-    ventana_edicion_datos = tkinter.Toplevel()
+    ventana_edicion_datos = tkinter.Tk()
     ventana_edicion_datos.geometry("600x650")
-    ven_para_cerrar.withdraw()
     texto = tkinter.Label(ventana_edicion_datos, text = "Edición de Datos", font = ("Arial", 30)).place( x = 150, y = 50)
     boton_sinnombre1 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 1",).place(x = 240, y = 125 )
     boton_sinnombre2 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 2",).place(x = 240, y = 175 )
     boton_sinnombre3 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 3",).place(x = 240, y = 225 )
-    boton_regresar = tkinter.Button(ventana_edicion_datos, text = "Regresar",command = ventana_edicion_datos.destroy()).place(x = 450, y = 500 )
-    label = Label(ventana_edicion_datos, image = bg) 
+    boton_regresar = tkinter.Button(ventana_edicion_datos, text = "Regresar",command = regresar).place(x = 450, y = 500 )
+    label = Label(ventana_edicion_datos) 
     label.place(x = 0, y = 0) 
-    label.draw
+    #label.draw
     frame = Frame(ventana_edicion_datos)
 
-def delete_items(tree,tabla):
-    #FALTA HACER QUE ESTE METODO SIRVA BIEN
+def delete_items(tree,tabla,root):
     #print(tree)
     #print(tabla)
-    name = tree.item(tree.selection())['text']
+    name=tree.item(tree.selection())['values'][0]
     print(name)
-    #query = f"DELETE * FROM {tabla} WHERE TipeBarang = ?;"
-    query = 'DELETE FROM ' +tabla+' WHERE name = ?'
-    #query = 'DELETE FROM UsuariosBD'
-    execute_db_query(query, (name,))
-    messagebox.showinfo("Eliminado con éxito") 
+    #cur = conn.cursor()
+    if tabla=="libros_table":
+        query = 'DELETE FROM ' +tabla+' WHERE id_L = ?'
+    elif tabla=="UsuariosBD":
+        query = 'DELETE FROM ' +tabla+' WHERE id_U = ?'
+    elif tabla=="prestamos_table":
+        query = 'DELETE FROM ' +tabla+' WHERE id_P = ?'
+    print(query)
+    #cur.execute(query,(name,))
+    #conn.commit()
+    messageDelete = messagebox.askyesno("Confirmación", "¿Quieres eliminar este registro permanentemente?")
+    if messageDelete > 0:
+        execute_db_query(query, (name,))
+        messagebox.showinfo(message="Eliminado con éxito")
+        root.destroy()
 
 def execute_db_query(query, parameters=()):
     print(conn)
@@ -1433,6 +1441,7 @@ def execute_db_query(query, parameters=()):
     query_result = cursor.execute(query, parameters)
     conn.commit()
     return query_result
+
 
 def edicionDatos(ven_para_cerrar):
     busqueda(ven_para_cerrar,True)
