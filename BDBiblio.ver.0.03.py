@@ -263,8 +263,8 @@ def mostrarUsuario(root, sqlS,editar):
         print(e)
 
     if editar:
-        eliminar= tkinter.Button(root,text='Eliminar',command= lambda: on_delete_selected_button_clicked(tree,"UsuariosBD")).pack(side=LEFT)
-        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"UsuariosBD")).pack(side=LEFT) 
+        eliminar= tkinter.Button(root,text='Eliminar',command= lambda: on_delete_selected_button_clicked(tree,"UsuariosBD",root)).pack(side=LEFT)
+        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"UsuariosBD",root)).pack(side=LEFT) 
 
 def mostrarPrestamo(root, sqlP,editar):
     try:
@@ -324,8 +324,8 @@ def mostrarPrestamo(root, sqlP,editar):
     
     salir = tkinter.Button(root, text = "Cerrar", command= root.destroy).pack(side=RIGHT)
     if editar:
-        eliminar= tkinter.Button(root,text='Eliminar', command= lambda: on_delete_selected_button_clicked(tree,"prestamos_table")).pack(side=LEFT)
-        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"prestamos_table")).pack(side=LEFT)
+        eliminar= tkinter.Button(root,text='Eliminar', command= lambda: on_delete_selected_button_clicked(tree,"prestamos_table",root)).pack(side=LEFT)
+        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"prestamos_table",root)).pack(side=LEFT)
 
 def mostrarLibro(root, sqlL, editar):
     try:
@@ -407,8 +407,8 @@ def mostrarLibro(root, sqlL, editar):
     
     salir = tkinter.Button(root, text = "Cerrar", command= root.destroy).pack(side=RIGHT)
     if editar:
-        eliminar= tkinter.Button(root,text='Eliminar', command= lambda: on_delete_selected_button_clicked(tree,"libros_table")).pack(side=LEFT)
-        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"libros_table")).pack(side=LEFT)
+        eliminar= tkinter.Button(root,text='Eliminar', command= lambda: on_delete_selected_button_clicked(tree,"libros_table",root)).pack(side=LEFT)
+        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"libros_table",root)).pack(side=LEFT)
 
 def main():
     
@@ -898,9 +898,6 @@ def consulta(ven_para_cerrar):
         print(e)
 
     exportar = tkinter.Button(tablaPrestamo, text = "Exportar", command= lambda: exportar_datos(filas, "Prestamo")).pack(side=LEFT)
-
-    
-    
     salir = tkinter.Button(tablaPrestamo, text = "Cerrar", command= tablaPrestamo.destroy).pack(side=RIGHT)
     
     
@@ -1424,7 +1421,7 @@ def delete_items(tree,tabla,root):
 
     name=tree.item(tree.selection())['values'][0]
     print(name)
-     #cur = conn.cursor()
+    #cur = conn.cursor()
     if tabla=="libros_table":
         query = 'DELETE FROM ' +tabla+' WHERE id_L = ?'
     elif tabla=="UsuariosBD":
@@ -1453,8 +1450,8 @@ def edicionDatos(ven_para_cerrar):
 
 def importar_datos(ven_para_cerrar):
 
-    ventana8=tkinter.Tk()
-    ventana8.geometry( "600x700")
+    ventana8=tkinter.Toplevel()
+    ventana8.geometry( "600x650")
     ven_para_cerrar.withdraw()
 
     #-----
