@@ -1311,22 +1311,22 @@ def libros(ven_para_cerrar):
     textBox_cantidad_prestados = tkinter.Entry(ventana5)
     #textBox_cantidad_prestados.pack(side=tkinter.TOP)
     textBox_cantidad_prestados.place(x = 250, y = 350)
-    """textBox_numero_ejemplar = tkinter.Entry(ventana5)
+    textBox_numero_ejemplar = tkinter.Entry(ventana5)
     #textBox_numero_ejemplar.pack(side=tkinter.TOP)
-    textBox_numero_ejemplar.place(x = 250, y = 370)"""
+    textBox_numero_ejemplar.place(x = 250, y = 370)
     #----------------------------------------------------------------
     textBox_volumen = tkinter.Entry(ventana5)
     #textBox_numero_ejemplar.pack(side=tkinter.TOP)
-    textBox_volumen.place(x = 250, y = 370)
+    textBox_volumen.place(x = 250, y = 390)
     textBox_numero_adq = tkinter.Entry(ventana5)
     #textBox_numero_ejemplar.pack(side=tkinter.TOP)
-    textBox_numero_adq.place(x = 250, y = 390)
+    textBox_numero_adq.place(x = 250, y = 410)
     textBox_numero_tarjeta_libro = tkinter.Entry(ventana5)
     #textBox_numero_ejemplar.pack(side=tkinter.TOP)
-    textBox_numero_tarjeta_libro.place(x = 250, y = 410)
+    textBox_numero_tarjeta_libro.place(x = 250, y = 430)
     textBox_ISBN = tkinter.Entry(ventana5)
     #textBox_numero_ejemplar.pack(side=tkinter.TOP)
-    textBox_ISBN.place(x = 250, y = 430)
+    textBox_ISBN.place(x = 250, y = 450)
     
     textBox_clasif = tkinter.Entry(ventana5)
     #textBox_numero_ejemplar.pack(side=tkinter.TOP)
@@ -1404,16 +1404,14 @@ def modify_items(tree,tabla,root):
 
     ventana_edicion_datos = tkinter.Toplevel()
     ventana_edicion_datos.geometry("600x650")
-    ven_para_cerrar.withdraw()
+    label1 = Label(ventana_edicion_datos, image = bg) 
+    label1.place(x = 0, y = 0) 
+    frame1 = Frame(ventana_edicion_datos)
     texto = tkinter.Label(ventana_edicion_datos, text = "Edición de Datos", font = ("Arial", 30)).place( x = 150, y = 50)
     boton_sinnombre1 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 1",).place(x = 240, y = 125 )
     boton_sinnombre2 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 2",).place(x = 240, y = 175 )
     boton_sinnombre3 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 3",).place(x = 240, y = 225 )
     boton_regresar = tkinter.Button(ventana_edicion_datos, text = "Regresar",command = regresar).place(x = 450, y = 500 )
-    label = Label(ventana_edicion_datos, image = bg) 
-    label.place(x = 0, y = 0) 
-    #label.draw
-    frame = Frame(ventana_edicion_datos)
 
 def delete_items(tree,tabla,root):
     #print(tree)
