@@ -1,4 +1,5 @@
 
+
 # -*- coding: utf-8 -*-
 """
 
@@ -14,6 +15,7 @@ from tkinter import OptionMenu
 from tkinter import ttk
 from tkinter import *
 import os
+import csv
 
 ## DB --------------------------------------------------------
 
@@ -252,7 +254,7 @@ def mostrarUsuario(root, sqlS,editar):
             
         
         cur.close()
-        
+        exportar = tkinter.Button(root, text = "Exportar", command= lambda: exportar_datos(filas, "Búsqueda")).pack(side=LEFT)
         salir = tkinter.Button(root, text = "Cerrar", command= root.destroy).pack(side=RIGHT)
         
         
@@ -261,8 +263,8 @@ def mostrarUsuario(root, sqlS,editar):
         print(e)
 
     if editar:
-        eliminar= tkinter.Button(root,text='Eliminar',command= lambda: on_delete_selected_button_clicked(tree,"UsuariosBD",root)).pack(side=LEFT)
-        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"UsuariosBD",root)).pack(side=LEFT) 
+        eliminar= tkinter.Button(root,text='Eliminar',command= lambda: on_delete_selected_button_clicked(tree,"UsuariosBD")).pack(side=LEFT)
+        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"UsuariosBD")).pack(side=LEFT) 
 
 def mostrarPrestamo(root, sqlP,editar):
     try:
@@ -316,12 +318,14 @@ def mostrarPrestamo(root, sqlP,editar):
     except Error as e:
         print(e)
     
+    exportar = tkinter.Button(root, text = "Exportar", command= lambda: exportar_datos(filas, "Búsqueda")).pack(side=LEFT)
+    salir = tkinter.Button(root, text = "Cerrar", command= root.destroy).pack(side=RIGHT)
     
     
     salir = tkinter.Button(root, text = "Cerrar", command= root.destroy).pack(side=RIGHT)
     if editar:
-        eliminar= tkinter.Button(root,text='Eliminar', command= lambda: on_delete_selected_button_clicked(tree,"prestamos_table",root)).pack(side=LEFT)
-        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"prestamos_table",root)).pack(side=LEFT)
+        eliminar= tkinter.Button(root,text='Eliminar', command= lambda: on_delete_selected_button_clicked(tree,"prestamos_table")).pack(side=LEFT)
+        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"prestamos_table")).pack(side=LEFT)
 
 def mostrarLibro(root, sqlL, editar):
     try:
@@ -398,11 +402,13 @@ def mostrarLibro(root, sqlL, editar):
     except Error as e:
         print(e)
     
+    exportar = tkinter.Button(root, text = "Exportar", command= lambda: exportar_datos(filas, "Búsqueda")).pack(side=LEFT)
+    salir = tkinter.Button(root, text = "Cerrar", command= root.destroy).pack(side=RIGHT)
     
     salir = tkinter.Button(root, text = "Cerrar", command= root.destroy).pack(side=RIGHT)
     if editar:
-        eliminar= tkinter.Button(root,text='Eliminar', command= lambda: on_delete_selected_button_clicked(tree,"libros_table",root)).pack(side=LEFT)
-        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"libros_table",root)).pack(side=LEFT)
+        eliminar= tkinter.Button(root,text='Eliminar', command= lambda: on_delete_selected_button_clicked(tree,"libros_table")).pack(side=LEFT)
+        edit= tkinter.Button(root,text='Editar',command=lambda:on_modify_selected_button_clicked(tree,"libros_table")).pack(side=LEFT)
 
 def main():
     
@@ -693,7 +699,7 @@ def main_account_screen():
 
 def menu():  
   ventana2= tkinter.Toplevel()
-  ventana2.geometry( "600x650")
+  ventana2.geometry("600x650")
   global main_screen
   main_screen.withdraw()
   label1 = Label(ventana2, image = bg) 
@@ -712,7 +718,8 @@ def menu():
   boton_registro_libro = tkinter.Button(ventana2, text = "Registro de libros", command=lambda: libros(ventana2),bg = "white").place(x = 70, y = 400 )
   boton_edicion_datos = tkinter.Button(ventana2, text = "Edicion de datos",command = lambda:edicionDatos(ventana2),bg = "white").place(x = 70, y = 450 )
   boton_busqueda = tkinter.Button(ventana2, text = "Busqueda", command=lambda:busqueda(ventana2),bg = "white").place(x = 70, y = 500)
-
+  boton_importacion = tkinter.Button(ventana2, text = "Importar datos", command=lambda:importar_datos(ventana2),bg = "white").place(x = 70, y = 550)
+  
   #boton_salir2 = tkinter.Button(ventana2, text = "Salir", command= ventana2.destroy).place(x = 250, y = 250 )
   
   boton_salir2 = tkinter.Button(ventana2, text = "Salir", command= salir,bg = "white").place(x = 290, y = 550 )
@@ -720,9 +727,12 @@ def menu():
 
 def consulta(ven_para_cerrar):
     
-  ventana3=tkinter.Tk()
-  ventana3.geometry( "600x500+100+50")
+  ventana3=tkinter.Toplevel()
+  ventana3.geometry( "600x650")
   ven_para_cerrar.withdraw()
+  label1 = Label(ventana3, image = bg) 
+  label1.place(x = 0, y = 0) 
+  frame1 = Frame(ventana3) 
 
   def usuarioBD():
       
@@ -825,6 +835,7 @@ def consulta(ven_para_cerrar):
     #salir = tkinter.Button(tablaUsuario, text = "Cerrar", command= tablaUsuario.destroy).grid(row=2, column=1, sticky="nsew")
     
     #salir = tkinter.Button(sf, text = "Cerrar", command= tablaUsuario.destroy).pack(side=RIGHT)
+    exportar = tkinter.Button(tablaUsuario, text = "Exportar", command= lambda: exportar_datos(filas, "Consulta")).pack(side=LEFT)
     salir = tkinter.Button(tablaUsuario, text = "Cerrar", command= tablaUsuario.destroy).pack(side=RIGHT)
     
     
@@ -885,7 +896,9 @@ def consulta(ven_para_cerrar):
         
     except Error as e:
         print(e)
-    
+
+    exportar = tkinter.Button(tablaPrestamo, text = "Exportar", command= lambda: exportar_datos(filas, "Prestamo")).pack(side=LEFT)
+
     
     
     salir = tkinter.Button(tablaPrestamo, text = "Cerrar", command= tablaPrestamo.destroy).pack(side=RIGHT)
@@ -974,7 +987,8 @@ def consulta(ven_para_cerrar):
     except Error as e:
         print(e)
     
-    
+    exportar = tkinter.Button(tablaLibro, text = "Exportar", command= lambda: exportar_datos(filas, "Libro")).pack(side=LEFT)
+
     salir = tkinter.Button(tablaLibro, text = "Cerrar", command= tablaLibro.destroy).pack(side=RIGHT)
     
     
@@ -986,23 +1000,23 @@ def consulta(ven_para_cerrar):
         ven_para_cerrar.deiconify()
         ventana3.destroy()
 
-  texto2 = tkinter.Label(ventana3, text = "Consulta", font = ("Arial", 30)).place( x = 275, y = 400)
-  boton_usuario = tkinter.Button(ventana3, text = "Usuario", command = usuarioBD).place(x = 50, y = 50 )
+  texto2 = tkinter.Label(ventana3, text = "Consulta", font=("Calibri", 25),bg = "white").place( x = 250, y = 180)
+  boton_usuario = tkinter.Button(ventana3, text = "Usuario", command = usuarioBD,bg = "white").place(x = 70, y = 250 )
 
   #Se despliega tabla de datos de usuarioBD
   #---------------------------------------------
 
-  boton_prestamo2 = tkinter.Button(ventana3, text = "Préstamo", command = prestamoBD).place(x = 50, y =90 )
+  boton_prestamo2 = tkinter.Button(ventana3, text = "Préstamo", command = prestamoBD,bg = "white").place(x = 70, y =300 )
 
   #Se despliega tabla de datos de prestamoBD
   #---------------------------------------------
 
-  boton_libro = tkinter.Button(ventana3, text = "Libro", command = libroBD).place(x = 50, y = 130 )
+  boton_libro = tkinter.Button(ventana3, text = "Libro", command = libroBD,bg = "white").place(x = 70, y = 350 )
 
   #Se despliega tabla de datos de libroBD
   #---------------------------------------------
 
-  boton_menu = tkinter.Button(ventana3, text = "Regresar", command=regresar).place(x = 150, y = 250)
+  boton_menu = tkinter.Button(ventana3, text = "Regresar", command=regresar,bg = "white").place(x = 260, y = 550)
  
 def registro(ven_para_cerrar):
     ven_para_cerrar.withdraw()
@@ -1057,10 +1071,13 @@ def registro(ven_para_cerrar):
         ventana4.destroy()
 
 
-    ventana4=tkinter.Tk()
-    ventana4.geometry( "600x600+100+50")
-    texto3 = tkinter.Label(ventana4, text = "Registro de Usuarios", font = ("Arial", 30)).place( x = 160, y = 500)
-    boton_menu2 = tkinter.Button(ventana4, text = "Regresar", command=regresar).place(x = 320, y = 450)
+    ventana4=tkinter.Toplevel()
+    ventana4.geometry("600x650")
+    label1 = Label(ventana4, image = bg) 
+    label1.place(x = 0, y = 0) 
+    frame1 = Frame(ventana4) 
+    texto3 = tkinter.Label(ventana4, text = "Registro de Usuarios",font=("Calibri", 25),bg = "white").place( x = 150, y = 180)
+    boton_menu2 = tkinter.Button(ventana4, text = "Regresar", command=regresar).place(x = 400, y = 550)
     
     #boton_registrar = tkinter.Button(ventana4, text = "Registrar", command= registrarBD).place(x = 250, y = 400)
 
@@ -1087,57 +1104,57 @@ def registro(ven_para_cerrar):
 
     # Texto de los cuadros de seleccion
 
-    nombre = tkinter.Label(ventana4,text="Nombre").place ( x = 100, y = 10)
-    apellidop = tkinter.Label(ventana4,text="Apellido Paterno").place ( x = 100, y = 35)
-    apellidom = tkinter.Label(ventana4,text="Apellido Materno").place ( x = 100, y = 60)
-    edad = tkinter.Label(ventana4,text="Edad").place ( x = 100, y = 85)
-    genero = tkinter.Label(ventana4,text="Género").place ( x = 100, y = 110)
-    escolaridad = tkinter.Label(ventana4,text="Escolaridad").place ( x = 100, y = 135)
-    ocupacion = tkinter.Label(ventana4,text="Ocupación").place ( x = 100, y = 160)
-    discapacidad = tkinter.Label(ventana4,text="Discapacidad").place( x =100, y = 185)
-    numtarjetaus = tkinter.Label(ventana4,text="Número tarjeta usuario").place( x =100, y = 210)
-    tipousuario = tkinter.Label(ventana4,text="Tipo de Usuario").place( x =100, y = 235)
+    nombre = tkinter.Label(ventana4,text="Nombre",bg = "white").place ( x = 70, y = 250)
+    apellidop = tkinter.Label(ventana4,text="Apellido Paterno",bg = "white").place ( x = 70, y = 270)
+    apellidom = tkinter.Label(ventana4,text="Apellido Materno",bg = "white").place ( x = 70, y = 290)
+    edad = tkinter.Label(ventana4,text="Edad",bg = "white").place ( x = 70, y = 310)
+    genero = tkinter.Label(ventana4,text="Género",bg = "white").place ( x = 70, y = 330)
+    escolaridad = tkinter.Label(ventana4,text="Escolaridad",bg = "white").place ( x = 70, y = 350)
+    ocupacion = tkinter.Label(ventana4,text="Ocupación",bg = "white").place ( x = 70, y = 370)
+    discapacidad = tkinter.Label(ventana4,text="Discapacidad",bg = "white").place( x =70, y = 390)
+    numtarjetaus = tkinter.Label(ventana4,text="Número tarjeta usuario",bg = "white").place( x =70, y = 410)
+    tipousuario = tkinter.Label(ventana4,text="Tipo de Usuario",bg = "white").place( x =70, y = 430)
     
     
     #Campos de entrada para el registro de usuarios
     
     textBox_nombre = tkinter.Entry(ventana4, textvariable = nom)
     #textBox_nombre.pack(side=tkinter.TOP)
-    textBox_nombre.place( x =250, y = 10)
+    textBox_nombre.place( x =250, y = 250)
     
     textBox_apellidop = tkinter.Entry(ventana4, textvariable = appat)
     #textBox_apellidop.pack(side=tkinter.TOP)
-    textBox_apellidop.place( x =250, y = 35)
+    textBox_apellidop.place( x =250, y = 270)
     
     textBox_apellidom = tkinter.Entry(ventana4, textvariable = apmat)
     #textBox_apellidom.pack(side=tkinter.TOP)
-    textBox_apellidom.place( x =250, y = 60)
+    textBox_apellidom.place( x =250, y = 290)
     
     textBox_edad = tkinter.Entry(ventana4, textvariable = edadI)
     #textBox_edad.pack(side=tkinter.TOP)
-    textBox_edad.place( x =250, y = 85)
+    textBox_edad.place( x =250, y = 310)
     
     textBox_genero = tkinter.Entry(ventana4, textvariable = gen)
     #textBox_genero.pack(side=tkinter.TOP)
-    textBox_genero.place( x =250, y = 110)
+    textBox_genero.place( x =250, y = 330)
     
     textBox_escolaridad = tkinter.Entry(ventana4, textvariable = esc)
     #textBox_escolaridad.pack(side=tkinter.TOP)
-    textBox_escolaridad.place( x =250, y = 135)
+    textBox_escolaridad.place( x =250, y = 350)
     
     textBox_ocupacion = tkinter.Entry(ventana4, textvariable = ocp)
     #textBox_ocupacion.pack(side=tkinter.TOP)
-    textBox_ocupacion.place( x =250, y = 160)
+    textBox_ocupacion.place( x =250, y = 370)
     
     textBox_discapacidad = tkinter.Entry(ventana4, textvariable = disc)
     #textBox_discapacidad.pack(side=tkinter.TOP)
-    textBox_discapacidad.place( x =250, y = 185)
+    textBox_discapacidad.place( x =250, y = 390)
     
     #NUMtau
     
     textBox_numero_tarjeta_usuario = tkinter.Entry(ventana4, textvariable = numtau)
     #textBox_discapacidad.pack(side=tkinter.TOP)
-    textBox_numero_tarjeta_usuario.place( x =250, y = 210)
+    textBox_numero_tarjeta_usuario.place( x =250, y = 410)
     
     
     
@@ -1161,8 +1178,8 @@ def registro(ven_para_cerrar):
     def adclave(event):
     
         if varDesTipUs.get() == "Administrador":
-            claveadmin.place( x =100, y = 285)
-            textBox_clave.place( x =250, y = 285)
+            claveadmin.place( x =70, y = 500)
+            textBox_clave.place( x =250, y = 500)
             #tpus = "Administrador"
             tpus.set("Administrador")
             clav = textBox_clave.get()
@@ -1180,12 +1197,12 @@ def registro(ven_para_cerrar):
     varDesTipUs.set("Selecionar")
     ventanaDeslizanteTipUs = OptionMenu(ventana4, varDesTipUs, *opTipus, command=adclave)
     ventanaDeslizanteTipUs.config(width=15)
-    ventanaDeslizanteTipUs.place(x = 250, y = 235)
+    ventanaDeslizanteTipUs.place(x = 70, y = 455)
     
     selecTipUs = varDesTipUs.get() #obtiene la seleccion del menu deslizante
     
     
-    boton_registrar = tkinter.Button(ventana4, text = "Registrar", command= registrarBD).place(x = 250, y = 400)
+    boton_registrar = tkinter.Button(ventana4, text = "Registrar", command= registrarBD,bg = "white").place(x = 250, y = 550)
     
 
     
@@ -1237,35 +1254,28 @@ def libros(ven_para_cerrar):
         ven_para_cerrar.deiconify()
         ventana5.destroy()
 
-    ventana5 = tkinter.Tk()
-    ventana5.geometry( "600x500+100+50")
-    texto4 = tkinter.Label(ventana5, text = "Registro Libros", font = ("Arial", 30)).place( x = 230, y = 400)
+    ventana5 = tkinter.Toplevel()
+    ventana5.geometry( "600x650")
+    label1 = Label(ventana5, image = bg) 
+    label1.place(x = 0, y = 0) 
+    frame1 = Frame(ventana5) 
+    texto4 = tkinter.Label(ventana5, text = "Registro Libros",font=("Calibri", 25),bg = "white").place( x = 200, y = 180)
     
-    boton_menu3 = tkinter.Button(ventana5, text = "Regresar", command=regresar).place(x = 300, y = 350)
+    boton_menu3 = tkinter.Button(ventana5, text = "Regresar", command=regresar).place(x = 260, y = 550)
     
-    boton_registrar2 = tkinter.Button(ventana5, text = "Registrar", command=registarLibro).place(x = 250, y = 310)
+    boton_registrar2 = tkinter.Button(ventana5, text = "Registrar", command=registarLibro).place(x = 250, y = 500)
     
-    autor = tkinter.Label(ventana5,text="Autor").place ( x = 95, y = 10)
-    
-    titulo = tkinter.Label(ventana5,text="Titulo").place ( x = 95, y = 35)
-    
-    clave = tkinter.Label(ventana5,text="Clave").place ( x = 95, y = 60)
-    
-    cantidad = tkinter.Label(ventana5,text="Cantidad").place ( x = 95, y = 85)
-    
-    coleccion = tkinter.Label(ventana5,text="Colección").place ( x = 95, y = 110)
-    
-    cantidad_prestados = tkinter.Label(ventana5,text="Cantidad prestados").place ( x = 95, y = 135)
-    
-    numero_ejemplar = tkinter.Label(ventana5,text="Volumen").place ( x = 95, y = 160)
-    
-    numero_ejemplar = tkinter.Label(ventana5,text="N° de adquisición").place ( x = 95, y = 185)
-    
-    numero_ejemplar = tkinter.Label(ventana5,text="N° de tarjeta del libro").place ( x = 95, y = 210)
-    
-    numero_ejemplar = tkinter.Label(ventana5,text="ISBN").place ( x = 95, y = 235)
-    
-    numero_ejemplar = tkinter.Label(ventana5,text="Clasificación").place ( x = 95, y = 260)
+    autor = tkinter.Label(ventana5,text="Autor",bg = "white").place ( x = 70, y = 250)
+    titulo = tkinter.Label(ventana5,text="Titulo",bg = "white").place ( x = 70, y = 270)
+    clave = tkinter.Label(ventana5,text="Clave",bg = "white").place ( x = 70, y = 290)
+    cantidad = tkinter.Label(ventana5,text="Cantidad",bg = "white").place ( x = 70, y = 310)
+    coleccion = tkinter.Label(ventana5,text="Colección",bg = "white").place ( x = 70, y = 330)
+    cantidad_prestados = tkinter.Label(ventana5,text="Cantidad prestados",bg = "white").place ( x = 70, y = 350)
+    numero_ejemplar = tkinter.Label(ventana5,text="Volumen",bg = "white").place ( x = 70, y = 370)
+    numero_ejemplar = tkinter.Label(ventana5,text="N° de adquisición",bg = "white").place ( x = 70, y = 390)
+    numero_ejemplar = tkinter.Label(ventana5,text="N° de tarjeta del libro",bg = "white").place ( x = 70, y = 410)
+    numero_ejemplar = tkinter.Label(ventana5,text="ISBN",bg = "white").place ( x = 70, y = 430)
+    numero_ejemplar = tkinter.Label(ventana5,text="Clasificación",bg = "white").place ( x = 70, y = 450)
     
     
     
@@ -1288,51 +1298,42 @@ def libros(ven_para_cerrar):
     
     textBox_autor = tkinter.Entry(ventana5)
     #textBox_autor.pack(side=tkinter.TOP)
-    textBox_autor.place(x = 250, y = 10)
-    
+    textBox_autor.place(x = 250, y = 250)
     textBox_titulo = tkinter.Entry(ventana5)
     #textBox_titulo.pack(side=tkinter.TOP)
-    textBox_titulo.place(x = 250, y = 35)
-    
+    textBox_titulo.place(x = 250, y = 270)
     textBox_clave = tkinter.Entry(ventana5)
     #textBox_clave.pack(side=tkinter.TOP)
-    textBox_clave.place(x = 250, y = 60)
-    
+    textBox_clave.place(x = 250, y = 290)
     textBox_cantidad = tkinter.Entry(ventana5)
     #textBox_cantidad.pack(side=tkinter.TOP)
-    textBox_cantidad.place(x = 250, y = 85)
-    
+    textBox_cantidad.place(x = 250, y = 310)
     textBox_coleccion = tkinter.Entry(ventana5)
     #textBox_coleccion.pack(side=tkinter.TOP)
-    textBox_coleccion.place(x = 250, y = 110)
-    
+    textBox_coleccion.place(x = 250, y = 330)
     textBox_cantidad_prestados = tkinter.Entry(ventana5)
     #textBox_cantidad_prestados.pack(side=tkinter.TOP)
-    textBox_cantidad_prestados.place(x = 250, y = 135)
-    
-    textBox_numero_ejemplar = tkinter.Entry(ventana5)
+    textBox_cantidad_prestados.place(x = 250, y = 350)
+    """textBox_numero_ejemplar = tkinter.Entry(ventana5)
     #textBox_numero_ejemplar.pack(side=tkinter.TOP)
-    textBox_numero_ejemplar.place(x = 250, y = 160)
+    textBox_numero_ejemplar.place(x = 250, y = 370)"""
     #----------------------------------------------------------------
     textBox_volumen = tkinter.Entry(ventana5)
     #textBox_numero_ejemplar.pack(side=tkinter.TOP)
-    textBox_volumen.place(x = 250, y = 185)
-    
+    textBox_volumen.place(x = 250, y = 370)
     textBox_numero_adq = tkinter.Entry(ventana5)
     #textBox_numero_ejemplar.pack(side=tkinter.TOP)
-    textBox_numero_adq.place(x = 250, y = 210)
-    
+    textBox_numero_adq.place(x = 250, y = 390)
     textBox_numero_tarjeta_libro = tkinter.Entry(ventana5)
     #textBox_numero_ejemplar.pack(side=tkinter.TOP)
-    textBox_numero_tarjeta_libro.place(x = 250, y = 235)
-    
+    textBox_numero_tarjeta_libro.place(x = 250, y = 410)
     textBox_ISBN = tkinter.Entry(ventana5)
     #textBox_numero_ejemplar.pack(side=tkinter.TOP)
-    textBox_ISBN.place(x = 250, y = 260)
+    textBox_ISBN.place(x = 250, y = 430)
     
     textBox_clasif = tkinter.Entry(ventana5)
     #textBox_numero_ejemplar.pack(side=tkinter.TOP)
-    textBox_clasif.place(x = 250, y = 260)
+    textBox_clasif.place(x = 250, y = 450)
 
 def prestamo(ven_para_cerrar):
     ven_para_cerrar.withdraw()
@@ -1352,23 +1353,26 @@ def prestamo(ven_para_cerrar):
         ven_para_cerrar.deiconify()
         ventana6.destroy()
 
-    ventana6=tkinter.Tk()
-    ventana6.geometry( "600x500+100+50")
-    texto5 = tkinter.Label(ventana6, text = "Préstamo", font = ("Arial", 30)).place( x = 250, y = 400)
-    boton_menu4 = tkinter.Button(ventana6, text = "Regresar", command=regresar).place(x = 300, y = 180)
-    boton_registrar3 = tkinter.Button(ventana6, text = "Registrar", command=registarPrestamo).place(x = 250, y = 140)    
-    fechain=tkinter.Label(ventana6,text="Fecha Inicial").place ( x = 110, y = 5)
-    fechafi=tkinter.Label(ventana6,text="Fecha Final").place ( x = 110, y = 25)
-    libros=tkinter.Label(ventana6,text="Libros").place ( x = 110, y = 45)
-    estado=tkinter.Label(ventana6,text="Estado").place ( x = 110, y = 65)
+    ventana6=tkinter.Toplevel()
+    ventana6.geometry( "600x650")
+    label1 = Label(ventana6, image = bg) 
+    label1.place(x = 0, y = 0) 
+    frame1 = Frame(ventana6) 
+    texto5 = tkinter.Label(ventana6, text = "Préstamo",font=("Calibri", 25),bg = "white").place( x = 220, y = 180)
+    boton_menu4 = tkinter.Button(ventana6, text = "Regresar", command=regresar,bg = "white").place(x = 260, y = 550)
+    boton_registrar3 = tkinter.Button(ventana6, text = "Registrar", command=registarPrestamo,bg = "white").place(x = 250, y = 450)    
+    fechain=tkinter.Label(ventana6,text="Fecha Inicial",bg = "white").place ( x = 70, y = 250)
+    fechafi=tkinter.Label(ventana6,text="Fecha Final",bg = "white").place ( x = 70, y = 300)
+    libros=tkinter.Label(ventana6,text="Libros",bg = "white").place ( x = 70, y = 350)
+    estado=tkinter.Label(ventana6,text="Estado",bg = "white").place ( x = 70, y = 400)
     textBox_fechain = tkinter.Entry(ventana6)
-    textBox_fechain.pack(side=tkinter.TOP)
+    textBox_fechain.place( x = 170, y = 250)
     textBox_fechafi = tkinter.Entry(ventana6)
-    textBox_fechafi.pack(side=tkinter.TOP)
+    textBox_fechafi.place( x = 170, y = 300)
     textBox_libros = tkinter.Entry(ventana6)
-    textBox_libros.pack(side=tkinter.TOP)
+    textBox_libros.place( x = 170, y = 350)
     textBox_estado = tkinter.Entry(ventana6)
-    textBox_estado.pack(side=tkinter.TOP)
+    textBox_estado.place( x = 170, y = 400)
 
 def on_delete_selected_button_clicked(tree,tabla,root):
     try:
@@ -1401,14 +1405,15 @@ def modify_items(tree,tabla,root):
         ventana_edicion_datos.destroy()
         root.destroy()
 
-    ventana_edicion_datos = tkinter.Tk()
+    ventana_edicion_datos = tkinter.Toplevel()
     ventana_edicion_datos.geometry("600x650")
+    ven_para_cerrar.withdraw()
     texto = tkinter.Label(ventana_edicion_datos, text = "Edición de Datos", font = ("Arial", 30)).place( x = 150, y = 50)
     boton_sinnombre1 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 1",).place(x = 240, y = 125 )
     boton_sinnombre2 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 2",).place(x = 240, y = 175 )
     boton_sinnombre3 = tkinter.Button(ventana_edicion_datos, text = "Boton Sin Nombre 3",).place(x = 240, y = 225 )
     boton_regresar = tkinter.Button(ventana_edicion_datos, text = "Regresar",command = regresar).place(x = 450, y = 500 )
-    label = Label(ventana_edicion_datos) 
+    label = Label(ventana_edicion_datos, image = bg) 
     label.place(x = 0, y = 0) 
     #label.draw
     frame = Frame(ventana_edicion_datos)
@@ -1416,9 +1421,10 @@ def modify_items(tree,tabla,root):
 def delete_items(tree,tabla,root):
     #print(tree)
     #print(tabla)
+
     name=tree.item(tree.selection())['values'][0]
     print(name)
-    #cur = conn.cursor()
+     #cur = conn.cursor()
     if tabla=="libros_table":
         query = 'DELETE FROM ' +tabla+' WHERE id_L = ?'
     elif tabla=="UsuariosBD":
@@ -1442,13 +1448,40 @@ def execute_db_query(query, parameters=()):
     conn.commit()
     return query_result
 
-
 def edicionDatos(ven_para_cerrar):
     busqueda(ven_para_cerrar,True)
 
+def importar_datos(ven_para_cerrar):
+
+    ventana8=tkinter.Tk()
+    ventana8.geometry( "600x700")
+    ven_para_cerrar.withdraw()
+
+    #-----
+    #Programacion del metodo
+    #-----
+
+    def regresar():
+        """
+        Metodo para regresar a la ventana anterior
+        """
+        ven_para_cerrar.deiconify()
+        ventana8.destroy()
+
+    boton_menu = tkinter.Button(ventana8, text = "Regresar", command=regresar).place(x = 400, y = 550)
+
+def exportar_datos(query, titulo):
+    #----------------------
+    #Programar metodo
+    #----------------------
+
+    print(titulo)
+    for i in query:
+            print(i)
 
 def busqueda(ven_para_cerrar,*editar):
     ven_para_cerrar.withdraw()
+
     def buscarBD():
       
       #Buscar en base de datos seleccion
@@ -1555,15 +1588,18 @@ def busqueda(ven_para_cerrar,*editar):
         ven_para_cerrar.deiconify()
         ventana7.destroy()
 
-    ventana7=tkinter.Tk()
+    ventana7=tkinter.Toplevel()
     ventana7.geometry( "600x650")
+    label1 = Label(ventana7, image = bg) 
+    label1.place(x = 0, y = 0) 
+    frame1 = Frame(ventana7) 
 
     if not editar:
-        texto6 = tkinter.Label(ventana7, text = "Búsqueda", font = ("Arial", 30)).place( x = 270, y = 400)
+        texto6 = tkinter.Label(ventana7, text = "Búsqueda",font=("Calibri", 25),bg = "white").place( x = 250, y = 180)
     else:
-        texto6 = tkinter.Label(ventana7, text = "Edición", font = ("Arial", 30)).place( x = 270, y = 400)
+        texto6 = tkinter.Label(ventana7, text = "Edición", font=("Calibri", 25),bg = "white").place(x = 250, y = 180)
         
-    boton_menu5 = tkinter.Button(ventana7, text = "Regresar", command=regresar).place(x = 330, y = 300)  
+    boton_menu5 = tkinter.Button(ventana7, text = "Regresar", command=regresar).place(x = 290, y = 550)  
     
     
     bsq = StringVar()
@@ -1574,7 +1610,7 @@ def busqueda(ven_para_cerrar,*editar):
     
     textBox_buscar = tkinter.Entry(ventana7, textvariable = bsq)
     
-    textBox_buscar.place(x = 230 , y = 200)
+    textBox_buscar.place(x = 100 , y = 400)
     
     #boton_buscar = tkinter.Button(ventana7, text = "Buscar",command = buscarBD).place(x = 400, y = 200)
     
@@ -1588,11 +1624,10 @@ def busqueda(ven_para_cerrar,*editar):
             
             ventanaModoTrans = OptionMenu(ventana7, varModo, *opciones2)
             ventanaModoTrans.config(width=20)
-            ventanaModoTrans.place(x = 350, y = 120)
+            label_instruciones1 = Label(ventana7,text = "Seleciona dentro que atributo quieres buscar",bg="white").place(x=70,y=320)
+            ventanaModoTrans.place(x = 70, y = 350)
             
             
-            
-        
         if varDes.get() == 'Base Completa':
             opciones2 = ['Usuario','Prestamo', 'Libro']
             varModo.set('Seleccionar rubro')
@@ -1632,11 +1667,12 @@ def busqueda(ven_para_cerrar,*editar):
     opciones = ['Base Completa', 'Usuario','Prestamo', 'Libro']
     ventanaDeslizante = OptionMenu(ventana7, varDes, *opciones, command=selDes)
     ventanaDeslizante.config(width=20)
-    ventanaDeslizante.place(x = 80, y = 120)
+    label_instruciones1 = Label(ventana7,text = "Seleciona el rubro donde quieres hacer tu busqeda",bg="white").place(x=70,y=250)
+    ventanaDeslizante.place(x = 70, y = 270)
     
     
     #tipoBus = StringVar()
     
-    boton_buscar = tkinter.Button(ventana7, text = "Buscar",command = buscarBD).place(x = 400, y = 200)
+    boton_buscar = tkinter.Button(ventana7, text = "Buscar",command = buscarBD).place(x = 400, y = 400)
 
 main_account_screen() # call the main_account_screen() function
